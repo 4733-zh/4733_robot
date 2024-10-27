@@ -1,0 +1,8 @@
+{
+  "component": "simbot.onebot11",
+  "authorization": {
+    "botUniqueId": "1878673405",
+    "apiServerHost": "http://localhost:3000",
+    "eventServerHost":"ws://localhost:3001"
+  }
+}
