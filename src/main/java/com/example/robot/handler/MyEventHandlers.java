@@ -1,5 +1,7 @@
 package com.example.robot.handler;
 
+import com.example.robot.Bean.BfvPlayer;
+import com.google.gson.Gson;
 import io.ktor.http.ContentType;
 import love.forte.simbot.application.Application;
 import love.forte.simbot.common.id.LongID;
@@ -16,10 +18,16 @@ import love.forte.simbot.quantcat.common.annotations.ContentTrim;
 import love.forte.simbot.quantcat.common.annotations.Filter;
 import love.forte.simbot.quantcat.common.annotations.Listener;
 import love.forte.simbot.suspendrunner.reserve.SuspendReserves;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -39,12 +47,47 @@ public class MyEventHandlers {
      */
     @Listener
     @ContentTrim
-    @Filter(value = "你好",targets = @Filter.Targets(authors = {"939502270"}))
+    @Filter(value = "你好")
     public CompletableFuture<?> onFriendMessage(OneBotFriendMessageEvent event) {
 
         System.out.println("OneBotFriendMessageEvent: " + event);
         return event.replyAsync("你也好");
         // 可以直接返回任意 CompletableFuture 类型
+    }
+
+    /**
+     * 此处监听的是OneBot组件中的专属类型：OneBot的好友消息事件
+     * 并且过滤消息：消息中的文本消息去除前后空字符后，等于 '你好'
+     */
+    @Listener
+    @ContentTrim
+    @Filter(value = "4733Aquarius")
+    public CompletableFuture<?> onFriendMessageBFV(OneBotFriendMessageEvent event) {
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Gson gson = new Gson();
+        Request request = new Request.Builder().url("https://api.gametools.network/bfv/stats/?name=4733Aquarius").build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            if (response.isSuccessful()) {
+                String body = response.body().toString();
+                // 处理响应数据
+                BfvPlayer player = gson.fromJson(body, BfvPlayer.class);
+                String kpm = player.getKillsPerMinute();
+
+                return event.replyAsync(kpm);
+
+            } else {
+                // 处理错误情况
+                return event.replyAsync("获取数据失败");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("OneBotFriendMessageEvent: " + event);
+        return event.replyAsync("获取数据失败");
     }
 
     @Listener
