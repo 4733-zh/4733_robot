@@ -1,8 +1,10 @@
 package com.example.robot.Bean;
 
 public class BfvPlayer {
+    private long userId;
     private String avatar;
     private String userName;
+    private long id;
     private int rank;
     private String rankImg;
     private double skill;
@@ -10,7 +12,7 @@ public class BfvPlayer {
     private String killsPerMinute;
     private String winPercent;
     private String bestClass;
-    private String Accuracy;
+    private String accuracy;
     private String headshots;
     private String timePlayed;
     private double killDeath;
@@ -36,11 +38,12 @@ public class BfvPlayer {
     private int heals;
     private int repairs;
     private int killAssists;
-    private int id;
 
-    public BfvPlayer(String avatar, String userName, int rank, String rankImg, double skill, double scorePerMinute, String killsPerMinute, String winPercent, String bestClass, String accuracy, String headshots, String timePlayed, double killDeath, double infantryKillDeath, double infantryKillsPerMinute, int kills, int deaths, int wins, int loses, double longestHeadShot, int revives, int dogtagsTaken, int highestKillStreak, int roundsPlayed, int awardScore, int bonusScore, int squadScore, int currentRankProgress, int totalRankProgress, int avengerKills, int saviorKills, int headShots, int heals, int repairs, int killAssists, int id) {
+    public BfvPlayer(long userId, String avatar, String userName, long id, int rank, String rankImg, double skill, double scorePerMinute, String killsPerMinute, String winPercent, String bestClass, String accuracy, String headshots, String timePlayed, double killDeath, double infantryKillDeath, double infantryKillsPerMinute, int kills, int deaths, int wins, int loses, double longestHeadShot, int revives, int dogtagsTaken, int highestKillStreak, int roundsPlayed, int awardScore, int bonusScore, int squadScore, int currentRankProgress, int totalRankProgress, int avengerKills, int saviorKills, int headShots, int heals, int repairs, int killAssists) {
+        this.userId = userId;
         this.avatar = avatar;
         this.userName = userName;
+        this.id = id;
         this.rank = rank;
         this.rankImg = rankImg;
         this.skill = skill;
@@ -48,7 +51,7 @@ public class BfvPlayer {
         this.killsPerMinute = killsPerMinute;
         this.winPercent = winPercent;
         this.bestClass = bestClass;
-        Accuracy = accuracy;
+        this.accuracy = accuracy;
         this.headshots = headshots;
         this.timePlayed = timePlayed;
         this.killDeath = killDeath;
@@ -74,10 +77,17 @@ public class BfvPlayer {
         this.heals = heals;
         this.repairs = repairs;
         this.killAssists = killAssists;
-        this.id = id;
     }
 
     public BfvPlayer() {
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getAvatar() {
@@ -94,6 +104,14 @@ public class BfvPlayer {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getRank() {
@@ -153,11 +171,11 @@ public class BfvPlayer {
     }
 
     public String getAccuracy() {
-        return Accuracy;
+        return accuracy;
     }
 
     public void setAccuracy(String accuracy) {
-        Accuracy = accuracy;
+        this.accuracy = accuracy;
     }
 
     public String getHeadshots() {
@@ -358,13 +376,5 @@ public class BfvPlayer {
 
     public void setKillAssists(int killAssists) {
         this.killAssists = killAssists;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

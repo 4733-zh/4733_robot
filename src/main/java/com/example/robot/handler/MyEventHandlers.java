@@ -68,45 +68,44 @@ public class MyEventHandlers {
         Gson gson = new Gson();
         Request request = new Request.Builder().url("https://api.gametools.network/bfv/stats/?name=4733Aquarius").build();
 
-        try {
-            Response response = okHttpClient.newCall(request).execute();
+        try (Response response = okHttpClient.newCall(request).execute()) {
             if (response.isSuccessful()) {
-                String body = response.body().toString();
+                String body = response.body().string(); // 使用string()方法
+                response.body().close(); // 确保资源释放
                 // 处理响应数据
                 BfvPlayer player = gson.fromJson(body, BfvPlayer.class);
                 String kpm = player.getKillsPerMinute();
 
-                return event.replyAsync(kpm);
-
+                return event.replyAsync("kpm为："+kpm);
             } else {
                 // 处理错误情况
-                return event.replyAsync("获取数据失败");
+                return event.replyAsync("处理数据失败: " + response.code());
             }
         } catch (IOException e) {
             e.printStackTrace();
+            // 更好的异常处理，可能向用户报告错误
+            return event.replyAsync("由于一个意外错误，获取数据失败");
         }
+    }
 
-        System.out.println("OneBotFriendMessageEvent: " + event);
-        return event.replyAsync("获取数据失败");
-    }
 
-    @Listener
-    public void onFriendRequest1(OneBotFriendRequestEvent event) {
-        RawFriendRequestEvent addFriendEvent = event.getSourceEvent();
-        int userId = addFriendEvent.getUserId().toInt();
-        String flag = addFriendEvent.getFlag();
-        if (userId == 1393452805){
-            event.acceptBlocking();
+        @Listener
+        public void onFriendRequest1(OneBotFriendRequestEvent event) {
+            RawFriendRequestEvent addFriendEvent = event.getSourceEvent();
+            int userId = addFriendEvent.getUserId().toInt();
+            String flag = addFriendEvent.getFlag();
+            if (userId == 1393452805){
+                event.acceptBlocking();
+            }
+        }
+        @Listener
+        public void onFriendRequest2(OneBotFriendRequestEvent event) {
+            RawFriendRequestEvent addFriendEvent = event.getSourceEvent();
+            int userId = addFriendEvent.getUserId().toInt();
+            String flag = addFriendEvent.getFlag();
+            if (userId == 939502270){
+                System.out.println("OneBotFriendRequestEvent: " + event);
+                event.acceptBlocking();
+            }
         }
     }
-    @Listener
-    public void onFriendRequest2(OneBotFriendRequestEvent event) {
-        RawFriendRequestEvent addFriendEvent = event.getSourceEvent();
-        int userId = addFriendEvent.getUserId().toInt();
-        String flag = addFriendEvent.getFlag();
-        if (userId == 939502270){
-            System.out.println("OneBotFriendRequestEvent: " + event);
-            event.acceptBlocking();
-        }
-    }
-}
